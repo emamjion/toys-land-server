@@ -46,6 +46,25 @@ async function run() {
 
     // get method
     app.get('/addToy', async(req, res) => {
+        const cursor = categoriesCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+    
+    app.get('/addToy/:id', async(req, res) => {
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        // const options = {
+        //     projection : {
+        //         toyName, photoUrl: 1, sellerName: 1, email: 1, category: 1, price: 1, rating: 1, quantity: 1
+        //     }
+        // }
+        const result = await categoriesCollection.findOne(query);
+        res.send(result);
+    })
+    
+
+    app.get('/addToy', async(req, res) => {
         
         let query = {};
         
@@ -63,6 +82,14 @@ async function run() {
         const newToy = req.body;
         console.log(newToy);
         const result = await categoriesCollection.insertOne(newToy);
+        res.send(result);
+    });
+
+    // method delete
+    app.delete('/addToy/:id', async(req, res) => {
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        const result = await categoriesCollection.deleteOne(query);
         res.send(result);
     })
 
