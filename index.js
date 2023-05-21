@@ -51,6 +51,7 @@ async function run() {
         res.send(result);
     })
     
+    /*
     app.get('/addToy/:id', async(req, res) => {
         const id = req.params.id;
         const query = {_id : new ObjectId(id)}
@@ -62,6 +63,7 @@ async function run() {
         const result = await categoriesCollection.findOne(query);
         res.send(result);
     })
+    */
     
 
     app.get('/addToy', async(req, res) => {
