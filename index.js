@@ -36,7 +36,30 @@ async function run() {
             const result = await categoriesCollection.find({status : text}).toArray();
             return res.send(result);
         }
+    });
+
+    // get method
+    app.get('/addToy', async(req, res) => {
+        
+        let query = {};
+        
+        if(req.query?.email){
+            query = { email : req.query.email }
+            console.log(query);
+        }
+        const cursor = categoriesCollection.find(query);
+        const result = await cursor.toArray();
+        res.send(result);
     })
+    
+    // post method
+    app.post('/addToy', async(req, res) => {
+        const newToy = req.body;
+        console.log(newToy);
+        const result = await categoriesCollection.insertOne(newToy);
+        res.send(result);
+    })
+
 
 
     // Send a ping to confirm a successful connection
