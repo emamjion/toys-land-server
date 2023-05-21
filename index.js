@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000;
@@ -8,9 +8,6 @@ const port = process.env.PORT || 5000;
 // middleware
 app.use(cors());
 app.use(express.json());
-
-console.log(process.env.DB_USER);
-console.log(process.env.DB_PASS);
 
 // Mongodb code here
 
@@ -29,12 +26,46 @@ async function run() {
     try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    const categoriesCollection = client.db('ToysLand').collection('categories');
+    
+    /*
+    app.get('/categories/:activeTab', async(req, res) => {
+        const cursor = categoriesCollection.find({});
+        const result = await cursor.toArray();
+        res.send(result);
+    });
+    */
+
+    app.get('/categories/:text', async(req, res) => {
+        console.log(req.params.text);
+        const text = req.params.text;
+        if(text == "sportscar" || text == 'truck' || text == 'regularcar'){
+            const result = await categoriesCollection.find({status : text}).toArray();
+            return res.send(result);
+        }
+        
+        // const result = await categoriesCollection.find().toArray();
+        // res.send(result);
+    })
+
+    /*
+    app.get('/categories/:id', async(req,res) => {
+        // console.log(req.params.text);
+        const id = req.params.id;
+
+        const query = { _id : new ObjectId(id) };
+        const result = await categoriesCollection.findOne(query);
+        // res.send(result);
+    })
+    */
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
     }
 }
 run().catch(console.dir);
