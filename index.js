@@ -28,14 +28,6 @@ async function run() {
     await client.connect();
 
     const categoriesCollection = client.db('ToysLand').collection('categories');
-    
-    /*
-    app.get('/categories/:activeTab', async(req, res) => {
-        const cursor = categoriesCollection.find({});
-        const result = await cursor.toArray();
-        res.send(result);
-    });
-    */
 
     app.get('/categories/:text', async(req, res) => {
         console.log(req.params.text);
@@ -44,21 +36,8 @@ async function run() {
             const result = await categoriesCollection.find({status : text}).toArray();
             return res.send(result);
         }
-        
-        // const result = await categoriesCollection.find().toArray();
-        // res.send(result);
     })
 
-    /*
-    app.get('/categories/:id', async(req,res) => {
-        // console.log(req.params.text);
-        const id = req.params.id;
-
-        const query = { _id : new ObjectId(id) };
-        const result = await categoriesCollection.findOne(query);
-        // res.send(result);
-    })
-    */
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
